@@ -1,44 +1,51 @@
-# PART 1: Create the library's book names and available copy counts
-books = ["matilda", "harry potter", "wonder", "the jungle book", "charlie"]
-copy_counts = [4, 0, 6, 3, 2]
+# ── BOOK CLASS ─────────────────────────────────────────────────
+class Book:
+    def __init__(self, title, author):
+        self.title       = title
+        self.author      = author
+        self.is_borrowed = False
 
-# PART 2: Pair books with copy counts into a dictionary
-library = {book: count for book, count in zip(books, copy_counts)}
-print("Full Library Stock:", library)
+    def borrow(self):
+        if self.is_borrowed:
+            print(f'"{self.title}" is already borrowed.')
+        else:
+            self.is_borrowed = True
+            print(f'"{self.title}" has been borrowed. Enjoy!')
 
-# PART 3: Filter only the books that are available
-available_books = [book for book in books if library[book] > 0]
-print("Books Available:", available_books)
+    def return_book(self):
+        if not self.is_borrowed:
+            print(f'"{self.title}" was not borrowed.')
+        else:
+            self.is_borrowed = False
+            print(f'"{self.title}" has been returned. Thank you!')
 
-# PART 4: Ask the reader which book they want to borrow
-chosen_book = input("Which book do you want to borrow? ")
+    def __str__(self):
+        status = "Borrowed" if self.is_borrowed else "Available"
+        return f'{self.title} by {self.author} [{status}]'
 
-# PART 5: Stop the checker early if the chosen book is not available
-if chosen_book not in library or library[chosen_book] == 0:
-    print(chosen_book, "is not available! Stopping the checker.")
-    exit()
 
-# PART 6: Create late fees and ask for an extra fee amount
-late_fees = [5, 8, 4, 6, 7]
-extra_fee = int(input("Enter the extra library fee to add to every book: "))
+# ── LIBRARY ────────────────────────────────────────────────────
+book1 = Book("Python Crash Course", "Eric Matthes")
+book2 = Book("Automate the Boring Stuff", "Al Sweigart")
+book3 = Book("Fluent Python", "Luciano Ramalho")
 
-# PART 7: Apply the extra fee to every late fee using map()
-updated_fees = list(map(lambda fee: fee + extra_fee, late_fees))
-print("Updated Late Fees:", updated_fees)
+print("=" * 42)
+print("         📚  LIBRARY SYSTEM")
+print("=" * 42)
+print(book1)
+print(book2)
+print(book3)
+print()
 
-# PART 8: Find the updated fee of the chosen book
-book_index = books.index(chosen_book)
-chosen_fee = updated_fees[book_index]
-print("Late fee for", chosen_book, "after update:", chosen_fee)
+book1.borrow()
+book2.borrow()
+book1.borrow()      # already borrowed
+print()
 
-# PART 9: Reduce the copy count after borrowing
-library[chosen_book] = library[chosen_book] - 1
-print(chosen_book, "borrowed! Remaining copies:", library[chosen_book])
+book1.return_book()
+book3.return_book()  # was not borrowed
+print()
 
-# PART 10: Print the final library summary
-print("")
-print("===== LIBRARY BOOK AVAILABILITY CHECKER =====")
-print("Book Borrowed:", chosen_book)
-print("Late Fee:", chosen_fee)
-print("Updated Library Stock:", library)
-print("=============================================")
+print(book1)
+print(book2)
+print(book3)
